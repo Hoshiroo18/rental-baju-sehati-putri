@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+/* 1. Import font Josefin Sans dari Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
+/* 2. Daftarkan font ke tema Tailwind v4 */
+@theme {
+  --font-josefin: 'Josefin Sans', sans-serif;
+}
+
+/* 3. Terapkan secara global ke seluruh body aplikasi */
+body {
+  margin: 0;
+  background-color: #EAEAEA;
+  font-family: var(--font-josefin);
+}
