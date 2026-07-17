@@ -23,16 +23,19 @@ class CostumeController extends Controller
 
                 return [
                     'id' => $costume->id,
-                    'costume_name' => $costume->name ?? 'Tanpa Nama', 
+                    'name' => $costume->name ?? 'Tanpa Nama',
+                    'costume_name' => $costume->name ?? 'Tanpa Nama', // Double-safe untuk frontend
                     'category' => $costume->category,
                     'price_1_day' => $costume->price_1_day,
                     'price_2_day' => $costume->price_2_day,
                     'price_3_day' => $costume->price_3_day,
                     'image' => $costume->image_path ? url('storage/' . $costume->image_path) : null,
-                    'total_stok' => $total_stok,
+                    'stock_total' => $total_stok,
+                    'total_stok' => $total_stok, // Double-safe
                     'booking' => $booking,
                     'sedang_dirental' => $sedang_dirental,
-                    'baju_tersedia' => $baju_tersedia < 0 ? 0 : $baju_tersedia, 
+                    'stock_available' => $baju_tersedia < 0 ? 0 : $baju_tersedia,
+                    'baju_tersedia' => $baju_tersedia < 0 ? 0 : $baju_tersedia, // Double-safe
                 ];
             });
 

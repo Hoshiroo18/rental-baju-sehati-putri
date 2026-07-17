@@ -288,7 +288,7 @@ export default function Pengembalian() {
             <div className="space-y-3 max-h-[75vh] overflow-y-auto pr-1">
               {groupedActiveList.length === 0 ? (
                 <div className="text-center py-12 bg-white rounded-2xl text-gray-400 border text-sm">
-                  Tidak ada transaksi sewa aktif yang terdeteksi, wok.
+                  Tidak ada transaksi sewa aktif yang terdeteksi.
                 </div>
               ) : (
                 groupedActiveList.map((group, index) => {
@@ -352,7 +352,7 @@ export default function Pengembalian() {
               renderReturnForm()
             ) : (
               <div className="text-center py-12 text-gray-400 text-xs font-medium">
-                Pilih salah satu data transaksi rental aktif di sebelah kiri untuk memproses pemulangan baju, wok.
+                Pilih salah satu data transaksi rental aktif di sebelah kiri untuk memproses pemulangan baju.
               </div>
             )}
           </div>

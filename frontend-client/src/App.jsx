@@ -149,12 +149,6 @@ function App() {
             </nav>
           </div>
           <div className="space-y-4">
-            <div className="flex items-center justify-between px-3 py-2 border-t border-gray-100 pt-4">
-              <div className="flex items-center space-x-2 text-sm text-gray-600"><Moon size={18} /> <span>Dark Mode</span></div>
-              <button onClick={() => setDarkMode(!darkMode)} className={`w-10 h-5 flex items-center rounded-full p-0.5 duration-300 ${darkMode ? 'bg-green-600' : 'bg-gray-300'}`}>
-                <div className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ${darkMode ? 'translate-x-5' : ''}`}></div>
-              </button>
-            </div>
             <button onClick={handleLogout} className="w-full flex items-center justify-center space-x-2 bg-[#334239] text-white py-2 rounded-md hover:bg-[#25312a] transition"><LogOut size={16} /> <span>Logout</span></button>
           </div>
         </aside>
@@ -168,7 +162,7 @@ function App() {
                 <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-8 gap-6 md:gap-4 bg-transparent w-full">
                   <div className="max-w-xl text-center md:text-left">
                     <h1 className="text-3xl md:text-4xl font-bold text-[#394931] leading-tight mb-4">Selamat Datang Di<br />Website Rental Kostum<br />Sehati Puteri</h1>
-                    <p className="text-gray-700 text-sm leading-relaxed mb-6">destinasi utama Anda untuk tampil memukau di setiap momen spesial. Kami menyediakan berbagai pilihan koleksi busana berkualitas mulai dari gaun pesta elegan, kebaya tradisional yang anggun,  hingga pakaian formal yang siap menyempurnakan penampilan Anda.</p>
+                    <p className="text-gray-700 text-sm leading-relaxed mb-6">Destinasi utama Anda untuk tampil memukau di setiap momen spesial. Kami menyediakan berbagai pilihan koleksi busana berkualitas mulai dari gaun pesta elegan, kebaya tradisional yang anggun, hingga pakaian formal yang siap menyempurnakan penampilan Anda.</p>
                     <button onClick={() => setActivePage('rental-baju')} className="bg-[#334239] text-white px-6 py-2 rounded-md font-medium text-sm shadow hover:bg-[#25312a] transition mx-auto md:mx-0 block md:inline-block">Rental</button>
                   </div>
                   <div className="hidden md:flex w-80 h-auto flex-col items-center justify-center md:ml-auto md:-mr-2 md:-mt-5">
@@ -219,8 +213,8 @@ function App() {
             ) : activePage === 'rental-baju' ? (
               <PilihBaju costumesData={costumesData} loadingCostumes={loadingCostumes} onRefresh={fetchCostumes} />
             ) : activePage === 'pesanan' ? (
-            <DaftarPesanan />
-            ) : activePage === 'rekap' ? ( // <-- Tambahkan block ini
+              <DaftarPesanan />
+            ) : activePage === 'rekap' ? (
               <RekapExcel />
             ) : (
               <Pengembalian />

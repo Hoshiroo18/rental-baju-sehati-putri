@@ -24,7 +24,7 @@ export default function StokBaju({ costumesData = [], loadingCostumes, onRefresh
 
   const totalVarian = filteredCostumes.length;
   const totalAsetBaju = filteredCostumes.reduce((acc, curr) => {
-    const stok = curr.total_stok ?? curr.stock_total ?? 0;
+    const stok = curr.stock_total ?? curr.total_stok ?? 0;
     return acc + Number(stok);
   }, 0);
 
@@ -48,21 +48,20 @@ export default function StokBaju({ costumesData = [], loadingCostumes, onRefresh
     }
   };
 
-    const handleFileChange = (e) => {
-        if (e.target.files.length > 0) {
-          const file = e.target.files[0];
-          
-          // Validasi ukuran file di sisi React (10MB = 10 * 1024 * 1024 bytes)
-          if (file.size > 10 * 1024 * 1024) {
-            alert("Wok, ukuran gambar kegedean! Maksimal cuma boleh 10 MB.");
-            e.target.value = ""; // Reset input file
-            return;
-          }
+  const handleFileChange = (e) => {
+    if (e.target.files.length > 0) {
+      const file = e.target.files[0];
+      
+      if (file.size > 10 * 1024 * 1024) {
+        alert("Wok, ukuran gambar kegedean! Maksimal cuma boleh 10 MB.");
+        e.target.value = "";
+        return;
+      }
 
-          setFormData({ ...formData, image: file });
-          setImagePreview(URL.createObjectURL(file));
-        }
-      };
+      setFormData({ ...formData, image: file });
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
 
   const openEditModal = (costume) => {
     setEditingId(costume.id);
@@ -72,7 +71,7 @@ export default function StokBaju({ costumesData = [], loadingCostumes, onRefresh
       price_1_day: String(costume.price_1_day ?? '').split('.')[0], 
       price_2_day: String(costume.price_2_day ?? '').split('.')[0], 
       price_3_day: String(costume.price_3_day ?? '').split('.')[0], 
-      stock_total: costume.total_stok ?? costume.stock_total ?? '',
+      stock_total: costume.stock_total ?? costume.total_stok ?? '',
       image: null 
     });
     setImagePreview(costume.image ?? null);
@@ -212,6 +211,7 @@ export default function StokBaju({ costumesData = [], loadingCostumes, onRefresh
           </div>
         </div>
 
+        {/* Mobile View */}
         <div className="block lg:hidden w-full space-y-3 mb-6">
           {loadingCostumes ? (
             <div className="text-center text-sm text-gray-400 py-8">Memuat data realtime...</div>
@@ -220,8 +220,8 @@ export default function StokBaju({ costumesData = [], loadingCostumes, onRefresh
           ) : (
             filteredCostumes.map((costume) => {
               const namaKostum = costume.costume_name ?? costume.name ?? 'Tanpa Nama';
-              const stokTotal = costume.total_stok ?? costume.stock_total ?? 0;
-              const readyStok = costume.baju_tersedia ?? stokTotal;
+              const stokTotal = costume.stock_total ?? costume.total_stok ?? 0;
+              const readyStok = costume.baju_tersedia ?? costume.stock_available ?? 0;
 
               return (
                 <div key={costume.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col space-y-3">
@@ -271,6 +271,7 @@ export default function StokBaju({ costumesData = [], loadingCostumes, onRefresh
           )}
         </div>
 
+        {/* Desktop View */}
         <div className="hidden lg:block bg-white rounded-2xl p-6 border border-gray-200 shadow-sm mb-6">
           <div className="overflow-x-auto rounded-xl border border-gray-100">
             <table className="min-w-full divide-y divide-gray-200 text-sm text-left">
@@ -295,8 +296,8 @@ export default function StokBaju({ costumesData = [], loadingCostumes, onRefresh
                 ) : (
                   filteredCostumes.map((costume, index) => {
                     const namaKostum = costume.costume_name ?? costume.name ?? 'Tanpa Nama';
-                    const stokTotal = costume.total_stok ?? costume.stock_total ?? 0;
-                    const readyStok = costume.baju_tersedia ?? stokTotal;
+                    const stokTotal = costume.stock_total ?? costume.total_stok ?? 0;
+                    const readyStok = costume.baju_tersedia ?? costume.stock_available ?? 0;
 
                     return (
                       <tr key={costume.id} className="hover:bg-gray-50/60 transition-colors">
