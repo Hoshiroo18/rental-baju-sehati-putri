@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Edit2, Trash2, CheckCircle, AlertTriangle, Printer, Clock, Calendar, MoreVertical, X, Search, Phone, RefreshCw } from 'lucide-react';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api-rental.hoshiroo.my.id/api';
+
 export default function DaftarPesanan() {
   const [orders, setOrders] = useState([]);
   const [costumesList, setCostumesList] = useState([]); 
@@ -110,7 +112,7 @@ export default function DaftarPesanan() {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/rentals`);
+      const response = await fetch(`${API_BASE_URL}/rentals`);
       const res = await response.json();
       if (response.ok && res.success && Array.isArray(res.data)) {
         setOrders(res.data);
@@ -127,7 +129,7 @@ export default function DaftarPesanan() {
 
   const fetchCostumes = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/costumes`);
+      const response = await fetch(`${API_BASE_URL}/costumes`);
       const res = await response.json();
       if (response.ok && res.data) {
         setCostumesList(res.data);
@@ -147,7 +149,7 @@ export default function DaftarPesanan() {
     try {
       setLoading(true);
       const deletePromises = originalOrders.map(order => 
-        fetch(`${import.meta.env.VITE_API_BASE_URL}/rentals/${order.id}`, {
+        fetch(`${API_BASE_URL}/rentals/${order.id}`, {
           method: 'DELETE',
           headers: { 'Accept': 'application/json' }
         })
@@ -195,7 +197,7 @@ export default function DaftarPesanan() {
         const distributedFine = index === 0 ? editForm.fine_amount : 0; 
         const distributedDesc = index === 0 ? editForm.fine_description : '';
         
-        return fetch(`${import.meta.env.VITE_API_BASE_URL}/rentals/${item.id}`, {
+        return fetch(`${API_BASE_URL}/rentals/${item.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({
@@ -318,14 +320,11 @@ export default function DaftarPesanan() {
   return (
     <div className="w-full flex-1 flex flex-col justify-between min-w-0 bg-[#D1D1D1]" style={{ fontFamily: "'Josefin Sans', sans-serif" }}>
       <div className="flex-1 w-full pb-16 pt-6 px-4 md:px-8 max-w-7xl mx-auto">
-        
-        {/* Header Judul Utama Bersih - Tanpa Button Menggantung */}
         <div className="flex items-center mb-6 border-b border-gray-300/60 pb-4">
           <FileText className="text-[#3A4D39] flex-shrink-0 mr-3" size={28} />
           <h2 className="text-xl md:text-3xl font-bold text-[#3A4D39] tracking-tight">Daftar Kelola Pesanan</h2>
         </div>
 
-        {/* Section Filter & Search + Integrasi Button Refresh Realtime */}
         <div className="flex flex-col lg:flex-row gap-4 mb-6 w-full items-stretch lg:items-center justify-between">
           <div className="bg-white p-1.5 rounded-2xl border border-gray-200 shadow-sm w-full lg:w-auto overflow-x-auto touch-pan-x">
             <div className="flex items-center space-x-1 overflow-x-auto whitespace-nowrap wrapper-scroll">
@@ -339,10 +338,8 @@ export default function DaftarPesanan() {
           </div>
 
           <div className="w-full lg:w-80 flex-shrink-0 flex flex-col gap-2 bg-white p-3 rounded-2xl border border-gray-200 shadow-xs">
-            {/* Row Label Atas Input: Judul Cari + Button Refresh Nyempil Proporsional */}
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-gray-700">Cari Riwayat Pesanan</span>
-              
               <button 
                 onClick={fetchOrders} 
                 disabled={loading}
@@ -353,7 +350,6 @@ export default function DaftarPesanan() {
               </button>
             </div>
 
-            {/* Input Form Search */}
             <div className="relative flex items-center bg-gray-50 rounded-xl border border-gray-200 px-3">
               <Search size={16} className="text-gray-400 mr-2" />
               <input type="text" placeholder="Cari nama pelanggan..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full py-2 text-xs bg-transparent outline-none text-gray-800" />
@@ -364,10 +360,9 @@ export default function DaftarPesanan() {
         {loading ? (
           <div className="text-center text-gray-500 py-12">Memuat riwayat transaksi...</div>
         ) : groupedOrdersList.length === 0 ? (
-          <div className="text-center text-gray-400 py-12 bg-white rounded-3xl border shadow-xs">Data tidak ditemukan wok.</div>
+          <div className="text-center text-gray-400 py-12 bg-white rounded-3xl border shadow-xs">Data tidak ditemukan.</div>
         ) : (
           <div className="w-full">
-            {/* View Mobile */}
             <div className="block lg:hidden space-y-4">
               {groupedOrdersList.map((group, index) => {
                 const itemCounts = {};
@@ -417,7 +412,6 @@ export default function DaftarPesanan() {
               })}
             </div>
 
-            {/* View Desktop */}
             <div className="hidden lg:block bg-white rounded-2xl border shadow-sm overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse min-w-[1000px]">

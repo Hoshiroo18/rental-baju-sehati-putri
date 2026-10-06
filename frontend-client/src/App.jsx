@@ -8,6 +8,8 @@ import DaftarPesanan from "./pages/DaftarPesanan.jsx";
 import Pengembalian from "./pages/Pengembalian.jsx";
 import RekapExcel from "./pages/RekapExcel.jsx";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api-rental.hoshiroo.my.id/api';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return localStorage.getItem('isLoggedIn') === 'true';
@@ -29,7 +31,7 @@ function App() {
   const fetchCostumes = async () => {
     setLoadingCostumes(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/costumes`, {
+      const response = await fetch(`${API_BASE_URL}/costumes`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -49,7 +51,7 @@ function App() {
 
   const fetchSummary = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/dashboard/summary`);
+      const response = await fetch(`${API_BASE_URL}/dashboard/summary`);
       if (response.ok) {
         const result = await response.json();
         setSummaryData({

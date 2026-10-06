@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Lock, User, Eye, EyeOff } from 'lucide-react';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api-rental.hoshiroo.my.id/api';
+
 function Login({ onLoginSuccess }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -11,7 +13,7 @@ function Login({ onLoginSuccess }) {
     e.preventDefault();
     
     try {
-      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/login`;
+      const apiUrl = `${API_BASE_URL}/login`;
       
       const response = await fetch(apiUrl, {
         method: 'POST',

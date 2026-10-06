@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ShoppingCart, X, Calendar, User, Wallet, ClipboardCheck, Minus, Plus, Trash2, Search, Clock, ShieldCheck, Phone } from 'lucide-react';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api-rental.hoshiroo.my.id/api';
+
 export default function PilihBaju({ costumesData = [], loadingCostumes, onRefresh }) {
   const dataAman = Array.isArray(costumesData) ? costumesData : [];
   
@@ -10,7 +12,7 @@ export default function PilihBaju({ costumesData = [], loadingCostumes, onRefres
   
   const [formData, setFormData] = useState({
     customer_name: '', 
-    customer_phone: '', // <-- State awal no hp
+    customer_phone: '',
     rental_date: '', 
     return_date: '', 
     payment_status: 'lunas', 
@@ -116,13 +118,13 @@ export default function PilihBaju({ costumesData = [], loadingCostumes, onRefres
 
     for (const item of checkoutQueue) {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/rentals`, {
+        const response = await fetch(`${API_BASE_URL}/rentals`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({
             costume_id: item.id,
             customer_name: formData.customer_name,
-            customer_phone: formData.customer_phone, // <-- Kirim no hp ke backend
+            customer_phone: formData.customer_phone,
             rental_date: formData.rental_date,
             return_date: formData.return_date,
             payment_status: formData.payment_status,
@@ -200,7 +202,7 @@ export default function PilihBaju({ costumesData = [], loadingCostumes, onRefres
           <div className="text-center py-12 text-gray-500 font-medium text-xs sm:text-sm">Memuat katalog baju adat...</div>
         ) : filteredCostumes.length === 0 ? (
           <div className="text-center py-12 text-gray-400 bg-white rounded-2xl shadow-xs max-w-md mx-auto p-6 text-xs sm:text-sm border">
-            {searchQuery ? 'Baju adat yang lu cari gak nemu wok.' : 'Belum ada koleksi baju di database.'}
+            {searchQuery ? 'Baju adat yang dicari tidak ditemukan.' : 'Belum ada koleksi baju di database.'}
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">

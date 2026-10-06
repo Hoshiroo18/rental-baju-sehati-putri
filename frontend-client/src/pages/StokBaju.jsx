@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { RefreshCw, Package, Trash2, Image as ImageIcon, Plus, X, Pencil, Upload, Clock, MoreVertical, Search } from 'lucide-react';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api-rental.hoshiroo.my.id/api';
+
 export default function StokBaju({ costumesData = [], loadingCostumes, onRefresh }) {
   const dataAman = Array.isArray(costumesData) ? costumesData : [];
   
@@ -53,7 +55,7 @@ export default function StokBaju({ costumesData = [], loadingCostumes, onRefresh
       const file = e.target.files[0];
       
       if (file.size > 10 * 1024 * 1024) {
-        alert("Wok, ukuran gambar kegedean! Maksimal cuma boleh 10 MB.");
+        alert("Ukuran gambar maksimal 10 MB!");
         e.target.value = "";
         return;
       }
@@ -105,8 +107,8 @@ export default function StokBaju({ costumesData = [], loadingCostumes, onRefresh
     }
 
     const targetUrl = editingId 
-      ? `${import.meta.env.VITE_API_BASE_URL}/costumes/${editingId}`
-      : `${import.meta.env.VITE_API_BASE_URL}/costumes`;
+      ? `${API_BASE_URL}/costumes/${editingId}`
+      : `${API_BASE_URL}/costumes`;
 
     try {
       const response = await fetch(targetUrl, {
@@ -135,7 +137,7 @@ export default function StokBaju({ costumesData = [], loadingCostumes, onRefresh
   const handleDelete = async (id) => {
     if (!window.confirm("Hapus baju adat ini dari database realtime?")) return;
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/costumes/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/costumes/${id}`, {
         method: 'DELETE',
         headers: { 'Accept': 'application/json' }
       });
@@ -211,7 +213,6 @@ export default function StokBaju({ costumesData = [], loadingCostumes, onRefresh
           </div>
         </div>
 
-        {/* Mobile View */}
         <div className="block lg:hidden w-full space-y-3 mb-6">
           {loadingCostumes ? (
             <div className="text-center text-sm text-gray-400 py-8">Memuat data realtime...</div>
@@ -271,7 +272,6 @@ export default function StokBaju({ costumesData = [], loadingCostumes, onRefresh
           )}
         </div>
 
-        {/* Desktop View */}
         <div className="hidden lg:block bg-white rounded-2xl p-6 border border-gray-200 shadow-sm mb-6">
           <div className="overflow-x-auto rounded-xl border border-gray-100">
             <table className="min-w-full divide-y divide-gray-200 text-sm text-left">

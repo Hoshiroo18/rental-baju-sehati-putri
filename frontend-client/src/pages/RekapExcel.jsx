@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { FileSpreadsheet, Download, RefreshCw } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api-rental.hoshiroo.my.id/api';
+
 export default function RekapExcel() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -9,7 +11,7 @@ export default function RekapExcel() {
   const fetchAllOrders = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/rentals`);
+      const response = await fetch(`${API_BASE_URL}/rentals`);
       const res = await response.json();
       if (response.ok && res.success && Array.isArray(res.data)) {
         setOrders(res.data);
@@ -27,7 +29,7 @@ export default function RekapExcel() {
 
   const exportToExcel = (tipe) => {
     if (orders.length === 0) {
-      alert("Gak ada data pesanan yang bisa direkap, wok!");
+      alert("Tidak ada data pesanan yang bisa direkap!");
       return;
     }
 
@@ -50,7 +52,7 @@ export default function RekapExcel() {
     });
 
     if (dataTersaring.length === 0) {
-      alert(`Wok, data rekap ${tipe} kosong untuk saat ini!`);
+      alert(`Data rekap ${tipe} kosong untuk saat ini!`);
       return;
     }
 
@@ -86,8 +88,6 @@ export default function RekapExcel() {
   return (
     <div className="w-full flex-1 flex flex-col justify-between min-w-0 bg-[#D1D1D1]" style={{ fontFamily: "'Josefin Sans', sans-serif" }}>
       <div className="flex-1 w-full pb-24 pt-6 px-4 md:px-8 max-w-4xl mx-auto">
-        
-        {/* Header Section */}
         <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4 border-b border-gray-300/60 pb-4 text-center sm:text-left">
           <div className="flex flex-col sm:flex-row items-center gap-3">
             <div className="bg-[#3A4D39] p-2.5 rounded-xl text-white shadow-sm">
@@ -108,7 +108,6 @@ export default function RekapExcel() {
           </button>
         </div>
 
-        {/* Info Box Card */}
         <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-xs mb-6 flex items-center justify-between text-xs sm:text-sm">
           <div className="flex items-center gap-3">
             <div className="bg-green-50 text-green-700 px-2.5 py-1.5 rounded-xl border border-green-100 font-black text-sm">
@@ -121,10 +120,7 @@ export default function RekapExcel() {
           </div>
         </div>
 
-        {/* Menu Panel Ekspor (Responsive Grid) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          
-          {/* Harian */}
           <div className="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 shadow-xs flex flex-col justify-between hover:shadow-sm transition-all">
             <div>
               <span className="bg-emerald-50 text-emerald-700 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border border-emerald-100 w-fit block">Hari Ini</span>
@@ -136,7 +132,6 @@ export default function RekapExcel() {
             </button>
           </div>
 
-          {/* Mingguan */}
           <div className="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 shadow-xs flex flex-col justify-between hover:shadow-sm transition-all">
             <div>
               <span className="bg-sky-50 text-sky-700 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border border-sky-100 w-fit block">7 Hari Terakhir</span>
@@ -148,7 +143,6 @@ export default function RekapExcel() {
             </button>
           </div>
 
-          {/* Bulanan */}
           <div className="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 shadow-xs flex flex-col justify-between hover:shadow-sm transition-all">
             <div>
               <span className="bg-amber-50 text-amber-700 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border border-amber-100 w-fit block">Bulan Berjalan</span>
@@ -160,7 +154,6 @@ export default function RekapExcel() {
             </button>
           </div>
 
-          {/* Tahunan */}
           <div className="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 shadow-xs flex flex-col justify-between hover:shadow-sm transition-all">
             <div>
               <span className="bg-rose-50 text-rose-700 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded border border-rose-100 w-fit block">Arsip 1 Tahun</span>
@@ -171,9 +164,7 @@ export default function RekapExcel() {
               <Download size={13}/> Download Excel
             </button>
           </div>
-
         </div>
-
       </div>
     </div>
   );

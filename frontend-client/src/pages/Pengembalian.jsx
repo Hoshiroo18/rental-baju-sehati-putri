@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Undo2, Calendar, AlertTriangle, DollarSign, FileText, CheckCircle, Shield, RefreshCw } from 'lucide-react';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api-rental.hoshiroo.my.id/api';
+
 export default function Pengembalian() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -28,7 +30,7 @@ export default function Pengembalian() {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/rentals`);
+      const response = await fetch(`${API_BASE_URL}/rentals`);
       const res = await response.json();
       if (response.ok && res.success && Array.isArray(res.data)) {
         const activeOrders = res.data.filter(o => o.status !== 'returned');
@@ -77,7 +79,6 @@ export default function Pengembalian() {
   };
 
   const handleSelectGroup = (group) => {
-    // Jika diklik lagi pada penyewa yang sama, kita toggle tutup detailnya
     if (selectedGroup?.key === group.key) {
       setSelectedGroup(null);
       return;
@@ -122,7 +123,7 @@ export default function Pengembalian() {
         const distributedFine = index === 0 ? fineAmount : 0;
         const distributedDesc = index === 0 ? fineDescription : '';
 
-        return fetch(`${import.meta.env.VITE_API_BASE_URL}/rentals/${order.id}`, {
+        return fetch(`${API_BASE_URL}/rentals/${order.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({
@@ -150,7 +151,6 @@ export default function Pengembalian() {
 
   const groupedActiveList = getGroupedActiveOrders();
 
-  // Komponen Form Pengembalian (Biar kodenya ga duplikat)
   const renderReturnForm = () => (
     <form onSubmit={handleProcessReturn} className="space-y-4 animate-fadeIn">
       <div className="bg-gray-50 p-3 rounded-2xl border text-xs space-y-1">
@@ -205,7 +205,7 @@ export default function Pengembalian() {
       )}
 
       <div>
-        <label className="block text-xs font-bold text-red-700 mb-1 definition-flex">
+        <label className="block text-xs font-bold text-red-700 mb-1 flex items-center gap-1">
           <DollarSign size={14}/> Nominal Denda Tambahan (Rp)
         </label>
         <div className="relative flex items-center">
@@ -226,7 +226,7 @@ export default function Pengembalian() {
           value={fineDescription}
           onChange={(e) => setFineDescription(e.target.value)}
           placeholder="Isi alasan jika ada denda" 
-          className="w-full border p-2.5 rounded-xl text-xs outline-none focus:border-[#3A4D39] h-20自动 resize-none"
+          className="w-full border p-2.5 rounded-xl text-xs outline-none focus:border-[#3A4D39] h-20 resize-none"
         />
       </div>
 
@@ -243,8 +243,6 @@ export default function Pengembalian() {
   return (
     <div className="w-full flex-1 flex flex-col justify-between min-w-0 bg-[#D1D1D1]" style={{ fontFamily: "'Josefin Sans', sans-serif" }}>
       <div className="flex-1 w-full pb-16 pt-6 px-4 md:px-8 max-w-7xl mx-auto">
-        
-        {/* Header Judul Utama Bersih Tanpa Button */}
         <div className="flex items-center mb-6 border-b border-gray-300/60 pb-4">
           <Undo2 className="text-[#3A4D39] flex-shrink-0 mr-3" size={28} />
           <h2 className="text-xl md:text-3xl font-bold text-[#3A4D39] tracking-tight">
@@ -253,15 +251,10 @@ export default function Pengembalian() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Kolom Kiri: Search & List Data Card */}
           <div className="lg:col-span-2 space-y-4">
-            
-            {/* Box Input Search + Integrasi Button Refresh di Sebelah Kanan Atas Card */}
             <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm">
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-xs font-bold text-gray-700">Cari Transaksi Rental Active</label>
-                
-                {/* Button Refresh Nyempil Proporsional Deket Card Data */}
                 <button 
                   onClick={fetchOrders} 
                   disabled={loading}
@@ -284,7 +277,6 @@ export default function Pengembalian() {
               </div>
             </div>
 
-            {/* List Card Penyewa */}
             <div className="space-y-3 max-h-[75vh] overflow-y-auto pr-1">
               {groupedActiveList.length === 0 ? (
                 <div className="text-center py-12 bg-white rounded-2xl text-gray-400 border text-sm">
@@ -296,7 +288,6 @@ export default function Pengembalian() {
 
                   return (
                     <div key={index} className="space-y-2">
-                      {/* Card Data Penyewa */}
                       <div 
                         onClick={() => handleSelectGroup(group)}
                         className={`bg-white rounded-2xl p-4 border transition-all cursor-pointer text-center sm:text-left ${
@@ -326,7 +317,6 @@ export default function Pengembalian() {
                         </div>
                       </div>
 
-                      {/* KHUSUS MOBILE: Menyisipkan Form Detail Tepat Di Bawah Card Yang Dipilih */}
                       {isCurrentSelected && (
                         <div className="block lg:hidden bg-white rounded-2xl p-5 border-2 border-[#3A4D39] shadow-md animate-fadeIn mb-4">
                           <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wider mb-3 border-b pb-1.5 flex items-center gap-2">
@@ -342,7 +332,6 @@ export default function Pengembalian() {
             </div>
           </div>
 
-          {/* Kolom Kanan: View Desktop Permanen */}
           <div className="hidden lg:block bg-white rounded-3xl p-6 border border-gray-200 shadow-sm h-fit sticky top-24">
             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b pb-2 flex items-center gap-2">
               <FileText size={16} className="text-[#3A4D39]"/> Detail Proses Form
@@ -356,7 +345,6 @@ export default function Pengembalian() {
               </div>
             )}
           </div>
-
         </div>
       </div>
     </div>
